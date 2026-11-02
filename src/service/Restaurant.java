@@ -21,5 +21,7 @@ public class Restaurant {
     }
 
     // metode crud
+
+
     // metode rapoarte
 }

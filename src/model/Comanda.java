@@ -1,5 +1,9 @@
 package model;
 
+import exceptions.CampGolException;
+import exceptions.DateInvalideException;
+import exceptions.ProdusInexistentException;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,19 +15,31 @@ public class Comanda {
     private double total;
 
     // constructor cu total necunoscut -> avem nevoie de meniu
-    public Comanda(int id, LocalDateTime dataSiOra, Map<Integer, Integer> produse, Map<Integer, Produs> meniu) {
+    public Comanda(int id, LocalDateTime dataSiOra, Map<Integer, Integer> produse, Map<Integer, Produs> meniu) throws CampGolException, DateInvalideException, ProdusInexistentException {
+        if (id <= 0) {
+            throw new DateInvalideException("ID-ul comenzii nu poate avea o valoare negativa!");
+        }
         this.id = id;
-        this.dataSiOra = dataSiOra;
-        this.produse = produse;
+
+        setDataSiOra(dataSiOra);
+        if (produse != null) {
+            setProduse(produse);
+        }
         this.total = calculeazaTotal(meniu);
     }
 
     // constructor cu total cunoscut (citit din fisier)
-    public Comanda(int id, LocalDateTime dataSiOra, Map<Integer, Integer> produse, double total) {
+    public Comanda(int id, LocalDateTime dataSiOra, Map<Integer, Integer> produse, double total) throws DateInvalideException, CampGolException {
+        if (id <= 0) {
+            throw new DateInvalideException("ID-ul comenzii nu poate avea o valoare negativa!");
+        }
         this.id = id;
-        this.dataSiOra = dataSiOra;
-        this.produse = produse;
-        this.total = total;
+
+        setDataSiOra(dataSiOra);
+        if (produse != null) {
+            setProduse(produse);
+        }
+        setTotal(total);
     }
 
     public int getId() {
@@ -34,7 +50,13 @@ public class Comanda {
         return dataSiOra;
     }
 
-    public void setDataSiOra(LocalDateTime dataSiOra) {
+    public void setDataSiOra(LocalDateTime dataSiOra) throws CampGolException, DateInvalideException {
+        if (dataSiOra == null) {
+            throw new CampGolException("Data si ora comenzii nu pot fi nule!");
+        }
+        if (dataSiOra.isAfter(LocalDateTime.now())) {
+            throw new DateInvalideException("Data si ora comenzii nu pot fi in viitor!");
+        }
         this.dataSiOra = dataSiOra;
     }
 
@@ -42,7 +64,10 @@ public class Comanda {
         return produse;
     }
 
-    public void setProduse(Map<Integer, Integer> produse) {
+    public void setProduse(Map<Integer, Integer> produse) throws CampGolException {
+        if (produse == null) {
+            throw new CampGolException("Lista de produse din comanda nu poate fi goala!");
+        }
         this.produse = produse;
     }
 
@@ -50,11 +75,24 @@ public class Comanda {
         return total;
     }
 
-    public double calculeazaTotal(Map <Integer, Produs> meniu) {
+    public void setTotal(double total) throws DateInvalideException {
+        if (total <= 0) {
+            throw new DateInvalideException("Totalul comenzii trebuie sa fie mai mare decat zero!");
+        }
+        this.total = total;
+    }
+
+    public double calculeazaTotal(Map <Integer, Produs> meniu) throws ProdusInexistentException {
         double suma = 0;
         for (int id : produse.keySet()) {
+            Produs produs = meniu.get(id);
+
+            if (produs == null) {
+                throw new ProdusInexistentException("Produsul cu ID: " + id + " nu exista!");
+            }
+
             // cantitate * pret
-            suma += produse.get(id) * meniu.get(id).getPret();
+            suma += produse.get(id) * produs.getPret();
         }
         return suma;
     }

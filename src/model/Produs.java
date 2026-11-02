@@ -1,18 +1,23 @@
 package model;
 
+import exceptions.CampGolException;
+import exceptions.DateInvalideException;
+
 public class Produs {
     private final int id;
     private String denumire;
     private Categorie categorie;
     private double pret;
     private int calorii;
+    private boolean esteVegetarian;
 
-    public Produs(int id, String denumire, Categorie categorie, double pret, int calorii) {
+    public Produs(int id, String denumire, Categorie categorie, double pret, int calorii, boolean esteVegetarian) throws CampGolException, DateInvalideException {
         this.id = id;
-        this.denumire = denumire;
-        this.categorie = categorie;
-        this.pret = pret;
-        this.calorii = calorii;
+        setDenumire(denumire);
+        setCategorie(categorie);
+        setPret(pret);
+        setCalorii(calorii);
+        setEsteVegetarian(esteVegetarian);
     }
 
     public int getId() {
@@ -23,7 +28,13 @@ public class Produs {
         return denumire;
     }
 
-    public void setDenumire(String denumire) {
+    public void setDenumire(String denumire) throws CampGolException, DateInvalideException {
+        if (denumire == null || denumire.trim().isEmpty()) {
+            throw new CampGolException("Denumirea produsului nu poate fi goala!");
+        }
+        if (denumire.length() < 3 || denumire.length() > 32) {
+            throw new DateInvalideException("Denumirea produsului trebuie sa aiba intre 3 si 32 de caractere!");
+        }
         this.denumire = denumire;
     }
 
@@ -31,7 +42,10 @@ public class Produs {
         return categorie;
     }
 
-    public void setCategorie(Categorie categorie) {
+    public void setCategorie(Categorie categorie) throws CampGolException {
+        if (categorie == null) {
+            throw new CampGolException("Categoria produsului nu poate fi nula!");
+        }
         this.categorie = categorie;
     }
 
@@ -39,7 +53,10 @@ public class Produs {
         return pret;
     }
 
-    public void setPret(double pret) {
+    public void setPret(double pret) throws DateInvalideException {
+        if (pret <= 0) {
+            throw new DateInvalideException("Pretul produsului trebuie sa fie mai mare decat zero!");
+        }
         this.pret = pret;
     }
 
@@ -47,8 +64,19 @@ public class Produs {
         return calorii;
     }
 
-    public void setCalorii(int calorii) {
+    public void setCalorii(int calorii) throws DateInvalideException {
+        if (calorii < 0) {
+            throw new DateInvalideException("Numarul de calorii al produsului nu poate avea o valoare negativa!");
+        }
         this.calorii = calorii;
+    }
+
+    public boolean isEsteVegetarian() {
+        return esteVegetarian;
+    }
+
+    public void setEsteVegetarian(boolean esteVegetarian) {
+        this.esteVegetarian = esteVegetarian;
     }
 
     @Override
@@ -59,6 +87,7 @@ public class Produs {
                 ", categorie=" + categorie +
                 ", pret=" + pret +
                 ", calorii=" + calorii +
+                ", esteVegetarian=" + esteVegetarian +
                 '}';
     }
 }
