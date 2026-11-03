@@ -1,0 +1,18 @@
+[
+  {
+    "categorie": "APERITIVE",
+    "esteVegetarian": true,
+    "denumire": "Bruschete",
+    "calorii": 350,
+    "pret": 20.5,
+    "id": 1
+  },
+  {
+    "categorie": "BAUTURI",
+    "esteVegetarian": true,
+    "denumire": "Sprite 330ml",
+    "calorii": 130,
+    "pret": 13,
+    "id": 2
+  }
+]

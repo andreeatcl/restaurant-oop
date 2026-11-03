@@ -21,7 +21,6 @@
   - numarul medii de kcal a unor comenzi (?) (pe intervale orare?)
 
 ### Clasa Utils
-- incarcare/salvare produse.json
 - incarare/salvare comenzi.json
 - input validation
 
@@ -40,6 +39,9 @@
 
 ### Clasa Restaurant
 - getters
+
+### Clasa FisierUtils
+- incarcare/salvare produse.json
 
 ### Exceptii
 - ProdusInexistentException
