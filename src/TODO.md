@@ -20,9 +20,10 @@
   - produsele cele mai vandute (pe baza cantitatilor comandate) pe categorii
   - numarul medii de kcal a unor comenzi (?) (pe intervale orare?)
 
-### Clasa Utils
-- incarare/salvare comenzi.json
-- input validation
+### Clasa FisierUtils
+- check exceptions?
+- verificare id-uri duplicate?
+- verificare produse inexistente?
 
 ### Main
 - diverse...
@@ -42,6 +43,7 @@
 
 ### Clasa FisierUtils
 - incarcare/salvare produse.json
+- incarare/salvare comenzi.json
 
 ### Exceptii
 - ProdusInexistentException

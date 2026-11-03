@@ -17,7 +17,7 @@ public class Comanda {
     // constructor cu total necunoscut -> avem nevoie de meniu
     public Comanda(int id, LocalDateTime dataSiOra, Map<Integer, Integer> produse, Map<Integer, Produs> meniu) throws CampGolException, DateInvalideException, ProdusInexistentException {
         if (id <= 0) {
-            throw new DateInvalideException("ID-ul comenzii nu poate avea o valoare negativa!");
+            throw new DateInvalideException("ID-ul comenzii trebuie sa aiba o valoare pozitiva!");
         }
         this.id = id;
 
@@ -31,7 +31,7 @@ public class Comanda {
     // constructor cu total cunoscut (citit din fisier)
     public Comanda(int id, LocalDateTime dataSiOra, Map<Integer, Integer> produse, double total) throws DateInvalideException, CampGolException {
         if (id <= 0) {
-            throw new DateInvalideException("ID-ul comenzii nu poate avea o valoare negativa!");
+            throw new DateInvalideException("ID-ul comenzii trebuie sa aiba o valoare pozitiva!");
         }
         this.id = id;
 

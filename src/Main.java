@@ -18,24 +18,32 @@ public class Main {
 
         try {
             Restaurant restaurant = new Restaurant();
-            // restaurant.getMeniu().put(1, new Produs(1, "Bruschete", Categorie.APERITIVE, 20.5, 350, true));
-            // restaurant.getMeniu().put(2, new Produs(2, "Sprite 330ml", Categorie.BAUTURI, 13.0, 130, true));
-            // restaurant.getMeniu().put(3, new Produs(3, "", Categorie.BAUTURI, 0, 130, true));
+
+            // testare citire & scriere in json - PRODUSE
             produse.add(new Produs(1, "Bruschete", Categorie.APERITIVE, 20.5, 350, true));
             produse.add(new Produs(2, "Sprite 330ml", Categorie.BAUTURI, 13.0, 130, true));
 
-            FisierUtils.salveazaProduse("produse.json", produse);
+            FisierUtils.salveazaProduse("data/produse.json", produse);
 
             produse.clear();
-            produse = FisierUtils.citesteProduse("produse.json");
+            produse = FisierUtils.citesteProduse("data/produse.json");
             System.out.println(produse);
 
-            // Map<Integer, Integer> linii = new HashMap<>();
-            // linii.put(1, 2);
-            // linii.put(2, 3);
+            for (Produs p : produse) {
+                restaurant.getMeniu().put(p.getId(), p);
+            }
 
-            // Comanda comanda = new Comanda(1, LocalDateTime.now(), linii, restaurant.getMeniu());
-            // System.out.println(comanda.getTotal());
+            // testare citire & scriere in json - COMENZI
+            Map<Integer, Integer> linii = new HashMap<>();
+            linii.put(1, 2);
+            linii.put(2, 3);
+            comenzi.add(new Comanda(1, LocalDateTime.now(), linii, restaurant.getMeniu()));
+
+            FisierUtils.salveazaComenzi("data/comenzi.json", comenzi);
+            comenzi.clear();
+            comenzi = FisierUtils.citesteComenzi("data/comenzi.json");
+            System.out.println(comenzi);
+
         }
         catch (Exception e) {
             e.printStackTrace();

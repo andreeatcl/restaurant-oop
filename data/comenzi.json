@@ -1,0 +1,15 @@
+[{
+  "total": 80,
+  "dataSiOra": "2026-11-03T22:48:24.027606900",
+  "id": 1,
+  "produse": [
+    {
+      "cantitate": 2,
+      "idProdus": 1
+    },
+    {
+      "cantitate": 3,
+      "idProdus": 2
+    }
+  ]
+}]

@@ -12,6 +12,9 @@ public class Produs {
     private boolean esteVegetarian;
 
     public Produs(int id, String denumire, Categorie categorie, double pret, int calorii, boolean esteVegetarian) throws CampGolException, DateInvalideException {
+        if (id <= 0) {
+            throw new DateInvalideException("ID-ul produsului trebuie sa aiba o valoare pozitiva!");
+        }
         this.id = id;
         setDenumire(denumire);
         setCategorie(categorie);
