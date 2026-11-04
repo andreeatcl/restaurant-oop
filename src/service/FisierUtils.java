@@ -15,17 +15,14 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FisierUtils {
     public static List<Produs> citesteProduse(String caleFisier) throws IOException, DateInvalideException, CampGolException {
         List<Produs> rezultat = new ArrayList<>();
 
         File fisier = new File(caleFisier);
-        if (!fisier.exists()) {
+        if (!fisier.exists() || fisier.length() == 0) {
             return rezultat;
         }
 
@@ -60,7 +57,8 @@ public class FisierUtils {
         return rezultat;
     }
 
-    public static void salveazaProduse(String caleFisier, List<Produs> produse) throws IOException {
+    // nu avem nevoie de lista - folosim colectie
+    public static void salveazaProduse(String caleFisier, Collection<Produs> produse) throws IOException {
         JSONArray rezultat = new JSONArray();
 
         for (Produs p : produse) {

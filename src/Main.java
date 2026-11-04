@@ -1,52 +1,47 @@
+import exceptions.CampGolException;
+import exceptions.DateInvalideException;
 import model.Categorie;
 import model.Comanda;
 import model.Produs;
 import service.FisierUtils;
 import service.Restaurant;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
 
-        List<Produs> produse = new ArrayList<>();
-        List<Comanda> comenzi = new ArrayList<>();
+        Restaurant restaurant = new Restaurant();
 
         try {
-            Restaurant restaurant = new Restaurant();
-
-            // testare citire & scriere in json - PRODUSE
-            produse.add(new Produs(1, "Bruschete", Categorie.APERITIVE, 20.5, 350, true));
-            produse.add(new Produs(2, "Sprite 330ml", Categorie.BAUTURI, 13.0, 130, true));
-
-            FisierUtils.salveazaProduse("data/produse.json", produse);
-
-            produse.clear();
-            produse = FisierUtils.citesteProduse("data/produse.json");
-            System.out.println(produse);
-
-            for (Produs p : produse) {
+            for (Produs p : FisierUtils.citesteProduse("data/produse.json")) {
                 restaurant.getMeniu().put(p.getId(), p);
             }
-
-            // testare citire & scriere in json - COMENZI
-            Map<Integer, Integer> linii = new HashMap<>();
-            linii.put(1, 2);
-            linii.put(2, 3);
-            comenzi.add(new Comanda(1, LocalDateTime.now(), linii, restaurant.getMeniu()));
-
-            FisierUtils.salveazaComenzi("data/comenzi.json", comenzi);
-            comenzi.clear();
-            comenzi = FisierUtils.citesteComenzi("data/comenzi.json");
-            System.out.println(comenzi);
-
+            restaurant.getComenzi().addAll(FisierUtils.citesteComenzi("data/comenzi.json"));
+            System.out.println("Produsele si comenzile au fost incarcate cu succes.");
+        } catch (Exception e) {
+            System.out.println("Eroare la citirea din fisiere: " + e.getMessage());
+            return;
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        System.out.println("Produse: " + restaurant.getProduse());
+        System.out.println("Comenzi: " + restaurant.getComenzi());
+
+        try {
+            Scanner scanner = new Scanner(System.in);
+            // restaurant.adaugaProdus(scanner);
+            // restaurant.adaugaComanda(scanner);
+        } catch (Exception e) {
+            System.out.println("Eroare la adaugarea unui nou produs: " + e.getMessage());
+        }
+
+        try {
+            FisierUtils.salveazaProduse("data/produse.json", restaurant.getMeniu().values());
+            FisierUtils.salveazaComenzi("data/comenzi.json", restaurant.getComenzi());
+            System.out.println("Produsele si comenzile au fost salvate in fisiere cu succes.");
+        } catch (IOException e) {
+            System.out.println("Eroare la salvarea in fisiere: " + e.getMessage());
         }
     }
 }

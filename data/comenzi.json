@@ -1,15 +1,216 @@
-[{
-  "total": 80,
-  "dataSiOra": "2026-11-03T22:48:24.027606900",
-  "id": 1,
-  "produse": [
-    {
+[
+  {
+    "total": 108,
+    "dataSiOra": "2026-10-29T12:30:15",
+    "id": 1,
+    "produse": [
+      {
+        "cantitate": 2,
+        "idProdus": 17
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 4
+      }
+    ]
+  },
+  {
+    "total": 115,
+    "dataSiOra": "2026-10-29T19:45:22",
+    "id": 2,
+    "produse": [
+      {
+        "cantitate": 1,
+        "idProdus": 1
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 18
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 6
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 12
+      }
+    ]
+  },
+  {
+    "total": 84,
+    "dataSiOra": "2026-10-30T14:15",
+    "id": 3,
+    "produse": [
+      {
+        "cantitate": 1,
+        "idProdus": 20
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 5
+      }
+    ]
+  },
+  {
+    "total": 241,
+    "dataSiOra": "2026-10-31T20:10:45",
+    "id": 4,
+    "produse": [
+      {
+        "cantitate": 1,
+        "idProdus": 3
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 19
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 9
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 14
+      }
+    ]
+  },
+  {
+    "total": 104,
+    "dataSiOra": "2026-11-01T13:20:10",
+    "id": 5,
+    "produse": [
+      {
+        "cantitate": 2,
+        "idProdus": 17
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 7
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 10
+      }
+    ]
+  },
+  {
+    "total": 234,
+    "dataSiOra": "2026-11-01T22:05:30",
+    "id": 6,
+    "produse": [
+      {
+        "cantitate": 3,
+        "idProdus": 16
+      },
+      {
+        "cantitate": 3,
+        "idProdus": 11
+      }
+    ]
+  },
+  {
+    "total": 54,
+    "dataSiOra": "2026-11-02T15:50:55",
+    "id": 7,
+    "produse": [
+      {
+        "cantitate": 1,
+        "idProdus": 18
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 8
+      }
+    ]
+  },
+  {
+    "total": 207,
+    "dataSiOra": "2026-11-03T18:35:40",
+    "id": 8,
+    "produse": [
+      {
+        "cantitate": 2,
+        "idProdus": 2
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 19
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 4
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 13
+      }
+    ]
+  },
+  {
+    "total": 79,
+    "dataSiOra": "2026-11-04T12:05:15",
+    "id": 9,
+    "produse": [
+      {
+        "cantitate": 1,
+        "idProdus": 1
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 5
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 15
+      }
+    ]
+  },
+  {
+    "total": 205,
+    "dataSiOra": "2026-11-04T21:30",
+    "id": 10,
+    "produse": [
+      {
+        "cantitate": 3,
+        "idProdus": 18
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 6
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 9
+      }
+    ]
+  },
+  {
+    "total": 128,
+    "dataSiOra": "2026-11-04T23:00:29.478202500",
+    "id": 11,
+    "produse": [
+      {
+        "cantitate": 1,
+        "idProdus": 1
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 19
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 5
+      }
+    ]
+  },
+  {
+    "total": 37,
+    "dataSiOra": "2026-11-04T23:03:29.102775400",
+    "id": 12,
+    "produse": [{
       "cantitate": 2,
-      "idProdus": 1
-    },
-    {
-      "cantitate": 3,
       "idProdus": 2
-    }
-  ]
-}]
+    }]
+  }
+]
