@@ -3,9 +3,7 @@
 ## To do:
 
 ### Clasa Restaurant
-- metode CRUD produse
-- generare id-uri?
-- inregistrare comanda
+- maybe CRUD produse?
 - rapoarte cerinta
   - valoarea totala a comenzilor dintr-o anumita zi
   - nr total de comenzi realizate intr-o anumita perioada
@@ -33,6 +31,7 @@
 ### Clasa Produs
 - constructori, getters, setters
 - input validation
+- custom toString() pentru afisare in meniu
 
 ### Clasa Comanda
 - constructori, getters, setters
@@ -40,6 +39,11 @@
 
 ### Clasa Restaurant
 - getters
+- mic refactor pe partea de produse (folosim direct meniu)
+- helper main incarcare comenzi/produse
+- autoincrement ids
+- add comanda/produs
+- afisare meniu
 
 ### Clasa FisierUtils
 - incarcare/salvare produse.json

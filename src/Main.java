@@ -16,10 +16,9 @@ public class Main {
         Restaurant restaurant = new Restaurant();
 
         try {
-            for (Produs p : FisierUtils.citesteProduse("data/produse.json")) {
-                restaurant.getMeniu().put(p.getId(), p);
-            }
-            restaurant.getComenzi().addAll(FisierUtils.citesteComenzi("data/comenzi.json"));
+            restaurant.incarcaProduse(FisierUtils.citesteProduse("data/produse.json"));
+            restaurant.incarcaComenzi(FisierUtils.citesteComenzi("data/comenzi.json"));
+
             System.out.println("Produsele si comenzile au fost incarcate cu succes.");
         } catch (Exception e) {
             System.out.println("Eroare la citirea din fisiere: " + e.getMessage());
@@ -31,9 +30,10 @@ public class Main {
         try {
             Scanner scanner = new Scanner(System.in);
             // restaurant.adaugaProdus(scanner);
-            // restaurant.adaugaComanda(scanner);
+            restaurant.afiseazaMeniu();
+            //restaurant.adaugaComanda(scanner);
         } catch (Exception e) {
-            System.out.println("Eroare la adaugarea unui nou produs: " + e.getMessage());
+            System.out.println("Eroare la adaugare: " + e.getMessage());
         }
 
         try {

@@ -2,6 +2,7 @@ package model;
 
 import exceptions.CampGolException;
 import exceptions.DateInvalideException;
+import org.w3c.dom.ls.LSOutput;
 
 public class Produs {
     private final int id;
@@ -84,13 +85,7 @@ public class Produs {
 
     @Override
     public String toString() {
-        return "Produs{" +
-                "id=" + id +
-                ", denumire='" + denumire + '\'' +
-                ", categorie=" + categorie +
-                ", pret=" + pret +
-                ", calorii=" + calorii +
-                ", esteVegetarian=" + esteVegetarian +
-                '}';
+        return String.format("%-4d | %-32s | %6.2f RON | %4d kcal | vegetarian: %b",
+                id, denumire, pret, calorii, esteVegetarian);
     }
 }

@@ -27,6 +27,17 @@ public class Restaurant {
         return this.meniu.values();
     }
 
+    // metode incarcare din fisier
+    public void incarcaProduse(Collection<Produs> produse) {
+        for (Produs p : produse) {
+            meniu.put(p.getId(), p);
+        }
+    }
+
+    public void incarcaComenzi(Collection<Comanda> comenzi) {
+        this.comenzi.addAll(comenzi);
+    }
+
     // metode contori id produse si comenzi
     private int urmatorulIdProdus() {
         int vmax = 0;
@@ -42,6 +53,19 @@ public class Restaurant {
             if (c.getId() > vmax) vmax = c.getId();
         }
         return vmax + 1;
+    }
+
+    // afisare meniu
+    public void afiseazaMeniu() {
+        System.out.println("====================================== MENIU ======================================");
+        for (Categorie categ : Categorie.values()) {
+            System.out.println("\n--------------------------------- " + categ + " ---------------------------------");
+            for (Produs p : meniu.values()) {
+                if (p.getCategorie() == categ) {
+                    System.out.println(p);
+                }
+            }
+        }
     }
 
     // metode crud
@@ -71,7 +95,7 @@ public class Restaurant {
         System.out.println("===================== ADAUGA O COMANDA NOUA =====================\n");
 
         Map<Integer, Integer> produseComandate = new HashMap<>();
-        System.out.println("Introduceti produsele comandate");
+        System.out.println("--- Introduceti produsele comandate ---");
 
         while (true) {
             System.out.println("\n======== Introducere produs ========");
