@@ -14,6 +14,7 @@ import java.util.*;
 public class Restaurant {
     private Map<Integer, Produs> meniu = new HashMap<>();
     private List<Comanda> comenzi = new ArrayList<>();
+    private final Rapoarte rapoarte = new Rapoarte(meniu, comenzi);
 
     public Map<Integer, Produs> getMeniu() {
         return meniu;
@@ -21,6 +22,10 @@ public class Restaurant {
 
     public List<Comanda> getComenzi() {
         return comenzi;
+    }
+
+    public Rapoarte getRapoarte() {
+        return rapoarte;
     }
 
     public Collection<Produs> getProduse() {
