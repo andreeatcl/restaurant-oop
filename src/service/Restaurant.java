@@ -68,6 +68,19 @@ public class Restaurant {
         }
     }
 
+    // afisare comenzi
+    public void afiseazaComenzi() {
+        System.out.println("====================================== COMENZI ======================================");
+        if (comenzi.isEmpty()) {
+            System.out.println("Nu exista comenzi!");
+            return;
+        }
+        for (Comanda c : comenzi) {
+            System.out.println(c.afiseazaComandaDetaliata(meniu));
+            System.out.println();
+        }
+    }
+
     // metode crud
     public void adaugaProdus(Scanner scanner) throws CampGolException, DateInvalideException {
         System.out.println("===================== ADAUGA UN PRODUS NOU IN MENIU =====================\n");
@@ -126,6 +139,67 @@ public class Restaurant {
         Comanda c = new Comanda(urmatorulIdComanda(), LocalDateTime.now(), produseComandate, meniu);
         comenzi.add(c);
         System.out.println("Comanda a fost inregistrata cu succes! Total de plata: " + c.getTotal());
+    }
+
+    private Comanda cautaComanda(int id) throws ProdusInexistentException {
+        for (Comanda c : comenzi) {
+            if (c.getId() == id) return c;
+        }
+        throw new ProdusInexistentException("Comanda cu id-ul " + id + " nu exista!");
+    }
+
+    public void stergeComanda(Scanner scanner) throws ProdusInexistentException {
+        afiseazaComenzi();
+        System.out.print("ID-ul comenzii de sters: ");
+        Comanda c = cautaComanda(Integer.parseInt(scanner.nextLine().trim()));
+        comenzi.remove(c);
+        System.out.println("Comanda " + c.getId() + " a fost stearsa cu succes!");
+    }
+
+    public void modificaComanda(Scanner scanner) throws ProdusInexistentException, DateInvalideException, CampGolException, ComandaGoalaException {
+        afiseazaComenzi();
+        System.out.print("ID-ul comenzii de modificat: ");
+        Comanda c = cautaComanda(Integer.parseInt(scanner.nextLine().trim()));
+
+        Map<Integer, Integer> copy = new HashMap<>(c.getProduse());
+
+        System.out.println("1. Adauga un produs in comanda sau modifica cantitatea");
+        System.out.println("2. Elimina un produs din comanda");
+        System.out.print("Optiune: ");
+        String choice = scanner.nextLine().trim();
+
+        afiseazaMeniu();
+        System.out.print("ID produs: ");
+        int idProdus = Integer.parseInt(scanner.nextLine().trim());
+
+        if (choice.equals("1")) {
+            if (!meniu.containsKey(idProdus)) {
+                throw new ProdusInexistentException("Produsul cu id-ul " + idProdus + " nu exista in meniu!");
+            }
+            System.out.print("Cantitate noua: ");
+            int cantitate = Integer.parseInt(scanner.nextLine().trim());
+            if (cantitate <= 0) {
+                throw new DateInvalideException("Cantitatea trebuie sa fie pozitiva");
+            }
+            // suprascriem cantitatea existenta sau adaugam un produs nou
+            copy.put(idProdus, cantitate);
+        } else if (choice.equals("2")) {
+            if (copy.remove(idProdus) == null) {
+                throw new ProdusInexistentException("Produsul cu id-ul " + idProdus + " nu se afla in comanda!");
+            }
+        } else {
+            throw new DateInvalideException("Optiune invalida.");
+        }
+
+        if (copy.isEmpty()) {
+            throw new ComandaGoalaException("Comanda nu poate ramane fara produse! Va rugam sa stergeti comanda.");
+        }
+
+        c.setProduse(copy);
+        c.calculeazaTotal(meniu);
+        System.out.println("Comanda modificata cu succes!");
+        System.out.println("Total nou: " + c.getTotal());
+
     }
 
     // metode rapoarte

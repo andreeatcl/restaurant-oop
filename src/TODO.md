@@ -18,13 +18,16 @@
   - produsele cele mai vandute (pe baza cantitatilor comandate) pe categorii
   - numarul medii de kcal a unor comenzi (?) (pe intervale orare?)
 
-### Clasa FisierUtils
-- check exceptions?
-- verificare id-uri duplicate?
-- verificare produse inexistente?
-
 ### Main
-- diverse...
+- meniu utilizare aplicatie:
+  1. afisare meniu
+  2. adaugare produs
+  3. afisare comenzi
+  4. inregistrare produs
+  5. modificare comanda
+  6. stergere comanda
+  7. rapoarte 
+  8. iesire din aplicatie
 
 # Done:
 
@@ -36,6 +39,7 @@
 ### Clasa Comanda
 - constructori, getters, setters
 - input validation
+- afisare detaliata
 
 ### Clasa Restaurant
 - getters
@@ -44,6 +48,8 @@
 - autoincrement ids
 - add comanda/produs
 - afisare meniu
+- afisare comenzi
+- CRUD comenzi
 
 ### Clasa FisierUtils
 - incarcare/salvare produse.json
@@ -54,3 +60,7 @@
 - DateInvalideException
 - CampGolException
 - ComandaGoalaException
+
+### Diverse
+- verificare id-uri duplicate pt citire din fisier + autoincrementare
+- verificare produse/comenzi goale

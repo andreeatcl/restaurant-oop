@@ -5,6 +5,7 @@ import exceptions.DateInvalideException;
 import exceptions.ProdusInexistentException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,9 +37,7 @@ public class Comanda {
         this.id = id;
 
         setDataSiOra(dataSiOra);
-        if (produse != null) {
-            setProduse(produse);
-        }
+        setProduse(produse);
         setTotal(total);
     }
 
@@ -65,7 +64,7 @@ public class Comanda {
     }
 
     public void setProduse(Map<Integer, Integer> produse) throws CampGolException {
-        if (produse == null) {
+        if (produse == null || produse.isEmpty()) {
             throw new CampGolException("Lista de produse din comanda nu poate fi goala!");
         }
         this.produse = produse;
@@ -97,13 +96,24 @@ public class Comanda {
         return suma;
     }
 
+    public String afiseazaComandaDetaliata(Map<Integer, Produs> meniu) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("======================================================================\n");
+        sb.append(String.format("Comanda %d | %s\n", id, dataSiOra.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))));
+        for (var linie : produse.entrySet()) {
+            Produs p = meniu.get(linie.getKey());
+            sb.append(String.format("   %-4d | %-32s | %2d x %6.2f RON\n",
+                    linie.getKey(), p.getDenumire(), linie.getValue(), p.getPret()));
+        }
+        sb.append("----------------------------------------------------------------------\n");
+        sb.append(String.format("   Total: %.2f RON\n", total));
+        sb.append("======================================================================\n");
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
-        return "Comanda{" +
-                "id=" + id +
-                ", dataSiOra=" + dataSiOra +
-                ", produse=" + produse +
-                ", total=" + total +
-                '}';
+        return String.format("Comanda %d | %s | %d produse | Total: %.2f RON",
+                id, dataSiOra.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")), produse.size(), total);
     }
 }

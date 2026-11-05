@@ -2,7 +2,6 @@ package model;
 
 import exceptions.CampGolException;
 import exceptions.DateInvalideException;
-import org.w3c.dom.ls.LSOutput;
 
 public class Produs {
     private final int id;

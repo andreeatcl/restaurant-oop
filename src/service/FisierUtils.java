@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class FisierUtils {
@@ -83,7 +84,7 @@ public class FisierUtils {
         List<Comanda> rezultat = new ArrayList<>();
 
         File fisier = new File(caleFisier);
-        if (!fisier.exists()) {
+        if (!fisier.exists() || fisier.length() == 0) {
             return rezultat;
         }
 
@@ -91,17 +92,22 @@ public class FisierUtils {
             JSONTokener tokener = new JSONTokener(file);
             JSONArray comenzi = new JSONArray(tokener);
 
+            Set<Integer> idVazute = new HashSet<>();
+
             for (int i = 0 ; i < comenzi.length(); i++) {
                 try {
                     JSONObject comanda = comenzi.getJSONObject(i);
                     Map<Integer, Integer> produse = new HashMap<>();
                     JSONArray jsonProduse = comanda.getJSONArray("produse");
                     for (int j = 0; j < jsonProduse.length(); j++) {
+
                         JSONObject jsonProdus = jsonProduse.getJSONObject(j);
-                        produse.put(
-                                jsonProdus.getInt("idProdus"),
-                                jsonProdus.getInt("cantitate")
-                        );
+                        int idProdus = jsonProdus.getInt("idProdus");
+
+                        if (produse.containsKey(idProdus)) {
+                            throw new DateInvalideException("Produsul " + idProdus + " apare de 2 ori in comanda " + comanda.getInt("id"));
+                        }
+                        produse.put(idProdus, jsonProdus.getInt("cantitate"));
                     }
 
                     Comanda c = new Comanda(
@@ -111,9 +117,13 @@ public class FisierUtils {
                             comanda.getDouble("total")
                     );
 
+                    if (!idVazute.add(c.getId())) {
+                        throw new DateInvalideException("ID comanda " + c.getId() + " duplicat in " + caleFisier);
+                    }
+
                     rezultat.add(c);
                 }
-                catch (JSONException | IllegalArgumentException e) {
+                catch (JSONException | IllegalArgumentException | DateTimeParseException e) {
                     throw new DateInvalideException("Comanda invalida la pozitia " + i + " in " + caleFisier + ": " + e.getMessage());
                 }
             }
