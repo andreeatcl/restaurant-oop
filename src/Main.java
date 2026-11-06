@@ -1,3 +1,4 @@
+import exceptions.ProdusInexistentException;
 import service.FisierUtils;
 import service.Rapoarte;
 import service.Restaurant;
@@ -75,7 +76,7 @@ public class Main {
         }
     }
 
-    private static void meniuRapoarte(Restaurant restaurant, Scanner scanner) {
+    private static void meniuRapoarte(Restaurant restaurant, Scanner scanner) throws ProdusInexistentException {
         Rapoarte rapoarte = restaurant.getRapoarte();
         boolean back = false;
         while (!back) {
@@ -99,14 +100,14 @@ public class Main {
             String optiune = scanner.nextLine().trim();
 
             switch (optiune) {
-                case "1" -> { }   // rapoarte.totalZi(scanner)
-                case "2" -> { }   // rapoarte.nrComenziPerioada(scanner)
-                case "3" -> { }   // rapoarte.topProduse()
-                case "4" -> { }   // rapoarte.vanzariProdus(scanner)
-                case "5" -> { }   // rapoarte.comenziZi(scanner)
-                case "6" -> { }   // rapoarte.valoareMedie()
-                case "7" -> { }   // rapoarte.vanzariPeZile()
-                case "8" -> { }   // rapoarte.oraDeVarf()
+                case "1" -> rapoarte.totalZi(scanner); // ok
+                case "2" -> rapoarte.nrComenziPerioada(scanner); // ok
+                case "3" -> rapoarte.topProduse(scanner); // ok
+                case "4" -> rapoarte.vanzariProdus(scanner); // ok
+                case "5" -> rapoarte.comenziZi(scanner); // ok
+                case "6" -> rapoarte.valoareMedie(); // ok
+                case "7" -> rapoarte.vanzariPeZile(); // ok
+                case "8" -> rapoarte.oraDeVarf(); // ok
                 case "9" -> { }   // rapoarte.bestsellers()
                 case "10" -> { }  // rapoarte.vanzariPeCategorii()
                 case "11" -> { }  // rapoarte.comandaMinMaxTotal()

@@ -6,10 +6,9 @@
 - maybe CRUD produse?
 
 ### Clasa Rapoarte
-- de implementat metodele pt rapoarte
+- de implementat metodele extra pt rapoarte
 
 ### Main
-- implementare meniu optiuni
 - final checks
 
 # Done:
@@ -35,8 +34,9 @@
 - CRUD comenzi
 
 ### Clasa Rapoarte
-- helper functions (data, date inexistente)
-- method stubs
+- helper functions (data, date inexistente + altele)
+- metode din cerinta
+- 2 metode extra
 
 ### Clasa FisierUtils
 - incarcare/salvare produse.json
@@ -52,4 +52,5 @@
 - verificare id-uri duplicate pt citire din fisier + autoincrementare
 - verificare produse/comenzi goale
 - implementare meniu principal optiuni
-- schita meniu rapoarte
+- meniu rapoarte
+- lucru cu 2 tabele unidimensionale
