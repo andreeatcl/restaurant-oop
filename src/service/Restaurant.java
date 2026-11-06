@@ -11,9 +11,14 @@ import model.Produs;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Clasa care reprezinta restaurantul: retine meniul si comenzile si ofera
+ * operatiile de administrare (adaugare produse, adaugare/modificare/stergere comenzi),
+ * operatiile de afisare si rapoarte
+ */
 public class Restaurant {
-    private Map<Integer, Produs> meniu = new HashMap<>();
-    private List<Comanda> comenzi = new ArrayList<>();
+    private final Map<Integer, Produs> meniu = new HashMap<>();
+    private final List<Comanda> comenzi = new ArrayList<>();
     private final Rapoarte rapoarte = new Rapoarte(meniu, comenzi);
 
     public Map<Integer, Produs> getMeniu() {
@@ -24,26 +29,44 @@ public class Restaurant {
         return comenzi;
     }
 
+    /**
+     * @return obiectul care genereaza rapoartele pe baza meniului si comenzilor acestui restaurant
+     */
     public Rapoarte getRapoarte() {
         return rapoarte;
     }
 
+    /**
+     *
+     * @return produsele din meniu (valorile colectiei meniu)
+     */
     public Collection<Produs> getProduse() {
         return this.meniu.values();
     }
 
-    // metode incarcare din fisier
+    /**
+     * adauga produsele date in meniu
+     *
+     * @param produse produsele citite din fisier
+     */
     public void incarcaProduse(Collection<Produs> produse) {
         for (Produs p : produse) {
             meniu.put(p.getId(), p);
         }
     }
 
+    /**
+     * adauga comenzile date la lista de comenzi a restaurantului
+     *
+     * @param comenzi comenzile citite din fisier
+     */
     public void incarcaComenzi(Collection<Comanda> comenzi) {
         this.comenzi.addAll(comenzi);
     }
 
-    // metode contori id produse si comenzi
+    /**
+     * @return urmatorul id liber pentru un produs
+     */
     private int urmatorulIdProdus() {
         int vmax = 0;
         for (int id : meniu.keySet()) {
@@ -52,6 +75,9 @@ public class Restaurant {
         return vmax + 1;
     }
 
+    /**
+     * @return urmatorul id liber pentru o comanda
+     */
     private int urmatorulIdComanda() {
         int vmax = 0;
         for (Comanda c : comenzi) {
@@ -60,7 +86,9 @@ public class Restaurant {
         return vmax + 1;
     }
 
-    // afisare meniu
+    /**
+     * afiseaza meniul, produsele fiind grupate pe categorii
+     */
     public void afiseazaMeniu() {
         System.out.println("====================================== MENIU ======================================");
         for (Categorie categ : Categorie.values()) {
@@ -73,7 +101,9 @@ public class Restaurant {
         }
     }
 
-    // afisare comenzi
+    /**
+     * afiseaza toate comenzile in format detaliat
+     */
     public void afiseazaComenzi() {
         System.out.println("====================================== COMENZI ======================================");
         if (comenzi.isEmpty()) {
@@ -86,7 +116,15 @@ public class Restaurant {
         }
     }
 
-    // metode crud
+    // ========================================== METODE CRUD =========================================
+
+    /**
+     * Adauga un produs nou in meniu, citind datele de la tastatura
+     *
+     * @param scanner               sursa de intrare
+     * @throws CampGolException daca un camp este gol
+     * @throws DateInvalideException daca un camp are valori invalide
+     */
     public void adaugaProdus(Scanner scanner) throws CampGolException, DateInvalideException {
         System.out.println("===================== ADAUGA UN PRODUS NOU IN MENIU =====================\n");
         System.out.print("Denumire: ");
@@ -109,6 +147,16 @@ public class Restaurant {
         meniu.put(p.getId(), p);
     }
 
+    /**
+     * adauga o comanda noua. utilizatorul introducere perechi de tip idProdus-cantitate
+     * daca un produs e inclus deja in comanda, cantitatile se aduna
+     *
+     * @param scanner                       sursa de intrare
+     * @throws ProdusInexistentException    daca un id introdus nu corespunde niciunui produs din meniu
+     * @throws ComandaGoalaException        daca nu s-a introdus niciun produs
+     * @throws DateInvalideException        daca o cantitate nu este pozitiva
+     * @throws CampGolException             daca datele comenzii sunt incomplete
+     */
     public void adaugaComanda(Scanner scanner) throws ProdusInexistentException, ComandaGoalaException, DateInvalideException, CampGolException {
         System.out.println("===================== ADAUGA O COMANDA NOUA =====================\n");
 
@@ -146,6 +194,13 @@ public class Restaurant {
         System.out.println("Comanda a fost inregistrata cu succes! Total de plata: " + c.getTotal());
     }
 
+    /**
+     * Cauta o comanda dupa ID
+     *
+     * @param id    id-ul comenzii cautate
+     * @return comanda gasita
+     * @throws ProdusInexistentException daa nu exista nicio comanda cu acest id
+     */
     private Comanda cautaComanda(int id) throws ProdusInexistentException {
         for (Comanda c : comenzi) {
             if (c.getId() == id) return c;
@@ -153,6 +208,12 @@ public class Restaurant {
         throw new ProdusInexistentException("Comanda cu id-ul " + id + " nu exista!");
     }
 
+    /**
+     * Sterge o comanda dupa un ID introdus de la tastatura
+     *
+     * @param scanner           sursa de intrare
+     * @throws ProdusInexistentException    daca nu exista nicio comanda cu acest id
+     */
     public void stergeComanda(Scanner scanner) throws ProdusInexistentException {
         afiseazaComenzi();
         System.out.print("ID-ul comenzii de sters: ");
@@ -161,6 +222,16 @@ public class Restaurant {
         System.out.println("Comanda " + c.getId() + " a fost stearsa cu succes!");
     }
 
+    /**
+     * modifica o comanda existenta: adauga un produs / schimba cantitatea unui produs deja comandat sau elimina un produs
+     * modificarile se aplica pe o copie si comanda se actualizeaza doar daca trec validarile pt copie
+     *
+     * @param scanner                       sursa de intrare
+     * @throws ProdusInexistentException    daca comanda/produsul nu exista
+     * @throws DateInvalideException        daca optiunea/cantitatea sunt invalide
+     * @throws CampGolException             daca datele comenzii sunt incomplete
+     * @throws ComandaGoalaException        daca comanda ar ramane fara produse
+     */
     public void modificaComanda(Scanner scanner) throws ProdusInexistentException, DateInvalideException, CampGolException, ComandaGoalaException {
         afiseazaComenzi();
         System.out.print("ID-ul comenzii de modificat: ");
@@ -207,5 +278,4 @@ public class Restaurant {
 
     }
 
-    // metode rapoarte
 }

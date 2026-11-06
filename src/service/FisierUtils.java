@@ -18,7 +18,22 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+/**
+ * Clasa utilitara pentru citirea si salvarea produselor si comenzilor in fisiere JSON
+ * Toate metodele sunt statice
+ */
 public class FisierUtils {
+
+    /**
+     * Citeste produsele dintr-un fisier JSON
+     * Daca fisierul nu exista sau este gol, returneaza o lista goala
+     *
+     * @param caleFisier                    calea catre fisierul json
+     * @return lista produselor citite
+     * @throws IOException                  daca fisierul nu poate fi citit
+     * @throws DateInvalideException        daca fisierul nu este un json valid sau un produs are valori invalide
+     * @throws CampGolException             daca un produs are un camp gol
+     */
     public static List<Produs> citesteProduse(String caleFisier) throws IOException, DateInvalideException, CampGolException {
         List<Produs> rezultat = new ArrayList<>();
 
@@ -58,7 +73,13 @@ public class FisierUtils {
         return rezultat;
     }
 
-    // nu avem nevoie de lista - folosim colectie
+    /**
+     * Salveaza produsele intr-un fisier JSON
+     *
+     * @param caleFisier            calea catre fisierul json
+     * @param produse               produsele de salvat
+     * @throws IOException daca fisierul nu poate fi scris
+     */
     public static void salveazaProduse(String caleFisier, Collection<Produs> produse) throws IOException {
         JSONArray rezultat = new JSONArray();
 
@@ -80,6 +101,16 @@ public class FisierUtils {
         }
     }
 
+    /**
+     * Citeste comenzile dintr-un fisier JSON
+     * Daca fisierul nu exista sau este gol, returneaza o lista goala
+     *
+     * @param caleFisier                calea catre fisierul json
+     * @return lista comenzilor citite
+     * @throws IOException              daca fisierul nu poate fi citit
+     * @throws DateInvalideException    daca fisierul nu este un json valid sau un produs are valori invalide
+     * @throws CampGolException         daca o comanda are un camp gol
+     */
     public static List<Comanda> citesteComenzi(String caleFisier) throws IOException, DateInvalideException, CampGolException {
         List<Comanda> rezultat = new ArrayList<>();
 
@@ -135,6 +166,13 @@ public class FisierUtils {
         return rezultat;
     }
 
+    /**
+     * salveaza comenzile intr-un fisier JSON
+     *
+     * @param caleFisier            calea catre fisierul json
+     * @param comenzi               comenzile de salvat
+     * @throws IOException          daca fisierul nu poate fi salvat
+     */
     public static void salveazaComenzi(String caleFisier, List<Comanda> comenzi) throws IOException {
         JSONArray rezultat = new JSONArray();
 

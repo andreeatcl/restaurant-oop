@@ -10,6 +10,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+/**
+ * Genereaza si afiseaza rapoartele de vanzari ale restaurantului pe baza meniului si ale comenzilor inregistrate
+ * Rapoartele pot fi accesate din meniul de rapoarte din Main (optiunea 7 a meniului principal)
+ */
 public class Rapoarte {
     private final Map<Integer, Produs> meniu;
     private final List<Comanda> comenzi;
@@ -17,12 +21,27 @@ public class Rapoarte {
     private static final DateTimeFormatter FORMAT_DATA = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private static final String[] ZILELE_SAPT = {"Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"};
 
+    /**
+     * Punct de acces / generator de rapoarte
+     *
+     * @param meniu         produsele din meniu, indexate dupa id-ul lor
+     * @param comenzi       lista comenzilor inregistrate
+     */
     public Rapoarte(Map<Integer, Produs> meniu, List<Comanda> comenzi) {
         this.meniu = meniu;
         this.comenzi = comenzi;
     }
 
     // ==================================== HELPERS ====================================
+
+    /**
+     * Citeste de la tastatura o data calendaristica. Cererea se repeta pana la introducere unei date valide
+     * Helper function pentru rapoarte ce implica datele calendaristice introduse de utilizator
+     *
+     * @param scanner       sursa de intrare
+     * @param tag           textul afisat utilizatorului. ex: "Data", "Data de inceput"
+     * @return data introdusa in formatul dd.mm.yyyy
+     */
     private LocalDate citesteData(Scanner scanner, String tag) {
         while (true) {
             System.out.print(tag + " (DD.MM.YYYY): ");
@@ -34,6 +53,14 @@ public class Rapoarte {
         }
     }
 
+    /**
+     * Citeste de la tastatura un numar intreg. Cererea se repeta pana la introducere unui numar intreg
+     * Helper function pentru rapoarte ce implica numere intregi introduse de utilizator
+     *
+     * @param scanner       sursa de intrare
+     * @param tag           textul afisat utilizatorului. ex: "Introduceti un numar: "
+     * @return numarul introdus de utilizator
+     */
     private int citesteInt(Scanner scanner, String tag) {
         while (true) {
             System.out.print(tag);
@@ -45,6 +72,11 @@ public class Rapoarte {
         }
     }
 
+    /**
+     * Verifica daca lipsesc comenzile
+     *
+     * @return true daca nu exista comanda - false daca exista comenzi
+     */
     private boolean nuExistaDate() {
         if (comenzi == null || comenzi.isEmpty()) {
             System.out.println("Nu exista comenzi inregistrate!");
@@ -53,7 +85,12 @@ public class Rapoarte {
         return false;
     }
 
-    // returneaza comenzile dintr-o zi
+    /**
+     * returneaza comenzile plasate intr-o anumita zi
+     *
+     * @param data      ziua cautata
+     * @return lista comenzilor din acea zi (lista goala daca nu exista)
+     */
     private List<Comanda> getComenziByZi(LocalDate data) {
         List<Comanda> rezultat = new ArrayList<>();
         for (Comanda c : comenzi) {
@@ -64,7 +101,13 @@ public class Rapoarte {
         return rezultat;
     }
 
-    // returneaza comenzile dintr-o perioada
+    /**
+     *  Returneaza comenzile plasate intr-o perioada
+     *
+     * @param start         prima zi a perioadei
+     * @param sfarsit       ultima zi a perioadei
+     * @return lista comenzilor din acea perioada (goala daca nu exista)
+     */
     private List<Comanda> getComenziByPerioada(LocalDate start, LocalDate sfarsit) {
         List<Comanda> rezultat = new ArrayList<>();
         for (Comanda c : comenzi) {
@@ -76,7 +119,12 @@ public class Rapoarte {
         return rezultat;
     }
 
-    // map produse si cantitatea vanduta
+    /**
+     * Calculeaza cantitatea totala vanduta pentru fiecare produs
+     * produsele nevandute nu apar in harta
+     *
+     * @return map de tip key: idProdus, value: nr portii vandute
+     */
     private Map<Integer, Integer> cantitatiVandute() {
         Map<Integer, Integer> cantitati = new HashMap<>();
         for (Comanda c : comenzi) {
@@ -86,7 +134,12 @@ public class Rapoarte {
         }
         return cantitati;
     }
-    // map produse si venitul generat
+
+    /**
+     * calculeaza venitul generat de fiecare produs (cantitate * pret)
+     *
+     * @return map de tip key: idProdus, value: venit generat in RON
+     */
     private Map<Integer, Double> venituriProduse() {
         Map<Integer, Double> venituri = new HashMap<>();
         for (Map.Entry<Integer, Integer> linie : cantitatiVandute().entrySet()) {
@@ -105,7 +158,10 @@ public class Rapoarte {
     }
 
     // ==================================== RAPOARTE ====================================
-    // 1. Total vanzari intr-o zi
+
+    /**
+     * 1. Total vanzari intr-o zi
+     */
     public void totalZi(Scanner scanner) {
         if (nuExistaDate()) return;
         LocalDate data = citesteData(scanner, "Data");
@@ -123,7 +179,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 2. Numarul total de comenzi dintr-o anumita perioada
+    /**
+     * 2. Numarul total de comenzi dintr-o anumita perioada
+     */
     public void nrComenziPerioada(Scanner scanner) {
         if (nuExistaDate()) return;
         LocalDate start = citesteData(scanner, "Data de inceput a perioadei");
@@ -137,7 +195,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 3. Produsele cele mai vandute (dupa cantitatea comandata)
+    /**
+     * 3. Produsele cele mai vandute (dupa cantitatea comandata)
+     */
     public void topProduse(Scanner scanner) {
         if (nuExistaDate()) return;
 
@@ -156,7 +216,11 @@ public class Rapoarte {
         footer();
     }
 
-    // 4. Valoarea totala a vanzarilor pentru un anumit produs
+    /**
+     * 4. Valoarea totala a vanzarilor pentru un anumit produs
+     * @param scanner       sursa de intrare
+     * @throws ProdusInexistentException daca id-ul nu corespunde niciunui produs din meniul restaurantului
+     */
     public void vanzariProdus(Scanner scanner) throws ProdusInexistentException {
         if (nuExistaDate()) return;
 
@@ -176,7 +240,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 5. Comenzile realizate intr-o anumita zi
+    /**
+     * 5. Comenzile realizate intr-o anumita zi
+     */
     public void comenziZi(Scanner scanner) {
         if (nuExistaDate()) return;
 
@@ -194,7 +260,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 6. Valoarea medie a unei comenzi
+    /**
+     * 6. Valoarea medie a unei comenzi
+     */
     public void valoareMedie() {
         if (nuExistaDate()) return;
 
@@ -211,7 +279,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 7. Vanzari in functie de zilele saptamanii
+    /**
+     * 7. Vanzari in functie de zilele saptamanii
+     */
     public void vanzariPeZile() {
         if (nuExistaDate()) return;
 
@@ -229,7 +299,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 8. Numarul de comenzi in functie de ora
+    /**
+     * 8. Numarul de comenzi in functie de ora
+     */
     public void oraDeVarf() {
         if (nuExistaDate()) return;
 
@@ -256,7 +328,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 9. Top produse vandute (in functie de venitul generat)
+    /**
+     * 9. Top produse vandute (in functie de venitul generat)
+     */
     public void bestsellers(Scanner scanner) {
         if (nuExistaDate()) return;
 
@@ -274,7 +348,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 10. Top produse vandute pe categorii
+    /**
+     * 10. Top produse vandute pe categorii
+     */
     public void vanzariPeCategorii(Scanner scanner) {
         if (nuExistaDate()) return;
 
@@ -301,7 +377,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 11. Venit pe intervale orare
+    /**
+     * 11. Venit pe intervale orare
+     */
     public void venitPeOra() {
         if (nuExistaDate()) return;
 
@@ -320,7 +398,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 12. Lista produselor nevandute
+    /**
+     * 12. Lista produselor nevandute
+     */
     public void produseNevandute() {
         if (nuExistaDate()) return;
 
@@ -337,7 +417,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 13. Distributia caloriilor pe intervale orare
+    /**
+     * 13. Distributia caloriilor pe intervale orare
+     */
     public void caloriiPeOra() {
         if (nuExistaDate()) return;
 
@@ -361,7 +443,9 @@ public class Rapoarte {
         footer();
     }
 
-    // 14. Vanzari pe zilele saptamanii si pe ora
+    /**
+     * 14. Vanzari pe zilele saptamanii si pe ora
+     */
     public void vanzariZiOra() {
         if (nuExistaDate()) return;
 
