@@ -3,6 +3,9 @@ package model;
 import exceptions.CampGolException;
 import exceptions.DateInvalideException;
 
+/**
+ * Reprezinta un produs din meniul restaurantului
+ */
 public class Produs {
     private final int id;
     private String denumire;
@@ -11,6 +14,18 @@ public class Produs {
     private int calorii;
     private boolean esteVegetarian;
 
+    /**
+     * creeaza un produs
+     *
+     * @param id                id-ul produsului (pozitiv)
+     * @param denumire          denumirea (intre 3 si 32 caractere)
+     * @param categorie         categoria produsului
+     * @param pret              pretul per portie (pozitiv)
+     * @param calorii           numarul de calorii per portie (nenegativ)
+     * @param esteVegetarian    true daca produsul este vegetarian
+     * @throws CampGolException daca denumirea/categoria sunt goale/nule
+     * @throws DateInvalideException    daca id-ul/denumirea/pretul/caloriile sunt invalide
+     */
     public Produs(int id, String denumire, Categorie categorie, double pret, int calorii, boolean esteVegetarian) throws CampGolException, DateInvalideException {
         if (id <= 0) {
             throw new DateInvalideException("ID-ul produsului trebuie sa aiba o valoare pozitiva!");

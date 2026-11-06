@@ -2,8 +2,7 @@
 
 ## To do:
 
-### Main
-- final checks
+Nothing left to do
 
 # Done:
 
@@ -48,3 +47,4 @@
 - implementare meniu principal optiuni
 - meniu rapoarte
 - lucru cu 2 tabele unidimensionale
+- javadoc pentru toate clasele si exceptiile

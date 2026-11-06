@@ -7,7 +7,19 @@ import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+/**
+ * Punctul de intrare al aplicatiei de gestiune a restaurantului
+ * Incarca datele din fisiere, afiseaza meniul de optiuni si salveaza datele la iesirea din program
+ */
 public class Main {
+
+    /**
+     * Porneste aplicatia
+     * incarca produsele si comenzile din "data/" apoi ruleaza meniul principal pana cand utilizatorul il inchide
+     * datele se salveaza automat la iesire
+     *
+     * @param args argumente
+     */
     public static void main(String[] args) {
 
         Restaurant restaurant = new Restaurant();
@@ -54,8 +66,11 @@ public class Main {
         scanner.close();
     }
 
+    /**
+     * Afiseaza optiunile meniului principal
+     */
     private static void afiseazaMeniuOptiuni() {
-        System.out.println("\n===================================== RESTAURANT =====================================");
+        System.out.println("\n===================================== MENIUL PRINCIPAL =====================================");
         System.out.println("1. Afiseaza meniul restaurantului");
         System.out.println("2. Adauga un produs in meniu");
         System.out.println("3. Afiseaza toate comenzile");
@@ -63,9 +78,15 @@ public class Main {
         System.out.println("5. Modifica o comanda");
         System.out.println("6. Sterge o comanda");
         System.out.println("7. Rapoarte");
+        System.out.println("8. Salveaza datele in fisier");
         System.out.println("0. Exit");
     }
 
+    /**
+     * Salveaza produsele si comenzile in fisierele JSON
+     *
+     * @param restaurant restaurantul ale carui date se salveaza
+     */
     private static void salveaza(Restaurant restaurant) {
         try {
             FisierUtils.salveazaProduse("data/produse.json", restaurant.getProduse());
@@ -76,13 +97,20 @@ public class Main {
         }
     }
 
+    /**
+     * ruleaza submeniul de rapoarte pana cand utilizatorul alege sa revina in main menu
+     *
+     * @param restaurant    restaurantul pt care se genereaza rapoartele
+     * @param scanner       sursa de intrare
+     * @throws ProdusInexistentException daca un raport primeste un id de produs inexistent
+     */
     private static void meniuRapoarte(Restaurant restaurant, Scanner scanner) throws ProdusInexistentException {
         Rapoarte rapoarte = restaurant.getRapoarte();
         boolean back = false;
         boolean showMenu = true;
         while (!back) {
             if (showMenu) {
-                System.out.println("\n------------------------------------ RAPOARTE ------------------------------------");
+                System.out.println("\n===================================== RAPOARTE =====================================\n");
                 System.out.println("1. Valoarea totala a comenzilor dintr-o anumita zi");
                 System.out.println("2. Numarul total de comenzi dintr-o anumita perioada");
                 System.out.println("3. Top produse vandute (in functie de cantitate)");

@@ -272,7 +272,7 @@ public class Restaurant {
         }
 
         c.setProduse(copy);
-        c.calculeazaTotal(meniu);
+        c.setTotal(c.calculeazaTotal(meniu));
         System.out.println("Comanda modificata cu succes!");
         System.out.println("Total nou: " + c.getTotal());
 
