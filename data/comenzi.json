@@ -191,7 +191,7 @@
     "id": 11,
     "produse": [
       {
-        "cantitate": 1,
+        "cantitate": 2,
         "idProdus": 1
       },
       {
@@ -212,5 +212,24 @@
       "cantitate": 2,
       "idProdus": 2
     }]
+  },
+  {
+    "total": 137,
+    "dataSiOra": "2026-11-06T20:38:36.542688300",
+    "id": 13,
+    "produse": [
+      {
+        "cantitate": 1,
+        "idProdus": 3
+      },
+      {
+        "cantitate": 2,
+        "idProdus": 5
+      },
+      {
+        "cantitate": 1,
+        "idProdus": 15
+      }
+    ]
   }
 ]

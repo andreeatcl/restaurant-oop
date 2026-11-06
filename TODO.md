@@ -2,12 +2,6 @@
 
 ## To do:
 
-### Clasa Restaurant
-- maybe CRUD produse?
-
-### Clasa Rapoarte
-- de implementat metodele extra pt rapoarte
-
 ### Main
 - final checks
 
@@ -36,7 +30,7 @@
 ### Clasa Rapoarte
 - helper functions (data, date inexistente + altele)
 - metode din cerinta
-- 2 metode extra
+- metode extra (ft. tablouri unidimensionale)
 
 ### Clasa FisierUtils
 - incarcare/salvare produse.json

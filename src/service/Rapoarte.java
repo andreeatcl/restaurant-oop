@@ -1,11 +1,13 @@
 package service;
 
 import exceptions.ProdusInexistentException;
+import model.Categorie;
 import model.Comanda;
 import model.Produs;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class Rapoarte {
@@ -20,10 +22,27 @@ public class Rapoarte {
         this.comenzi = comenzi;
     }
 
-    // helpers
+    // ==================================== HELPERS ====================================
     private LocalDate citesteData(Scanner scanner, String tag) {
-        System.out.print(tag + " (DD.MM.YYYY): ");
-        return LocalDate.parse(scanner.nextLine().trim(), FORMAT_DATA);
+        while (true) {
+            System.out.print(tag + " (DD.MM.YYYY): ");
+            try {
+                return LocalDate.parse(scanner.nextLine().trim(), FORMAT_DATA);
+            } catch (DateTimeParseException e) {
+                System.out.println("Data invalida! Formatul corect este DD.MM.YYYY.");
+            }
+        }
+    }
+
+    private int citesteInt(Scanner scanner, String tag) {
+        while (true) {
+            System.out.print(tag);
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Va rugam introduceti un numar intreg!");
+            }
+        }
     }
 
     private boolean nuExistaDate() {
@@ -67,6 +86,15 @@ public class Rapoarte {
         }
         return cantitati;
     }
+    // map produse si venitul generat
+    private Map<Integer, Double> venituriProduse() {
+        Map<Integer, Double> venituri = new HashMap<>();
+        for (Map.Entry<Integer, Integer> linie : cantitatiVandute().entrySet()) {
+            Produs p = meniu.get(linie.getKey());
+            venituri.put(linie.getKey(), linie.getValue() * p.getPret());
+        }
+        return venituri;
+    }
 
     private void header() {
         System.out.println("\n------------------------------------ RAPORT ------------------------------------");
@@ -90,7 +118,7 @@ public class Rapoarte {
 
         header();
         System.out.println("TOTAL VANZARI IN ZIUA " + data.format(FORMAT_DATA) + "\n");
-        System.out.printf("Numar comenzi : %d", comenziZi.size());
+        System.out.printf("Numar comenzi : %d\n", comenziZi.size());
         System.out.printf("Total vanzari : %.2f RON", total);
         footer();
     }
@@ -113,8 +141,7 @@ public class Rapoarte {
     public void topProduse(Scanner scanner) {
         if (nuExistaDate()) return;
 
-        System.out.print("Top cate produse? Introduceti nr: ");
-        int top = Integer.parseInt(scanner.nextLine().trim());
+        int top = citesteInt(scanner, "Top cate produse doriti sa vedeti? Introduceti nr: ");
 
         // transformam map-ul in lista pentru sortare
         List<Map.Entry<Integer, Integer>> sorted = new ArrayList<>(cantitatiVandute().entrySet());
@@ -133,8 +160,7 @@ public class Rapoarte {
     public void vanzariProdus(Scanner scanner) throws ProdusInexistentException {
         if (nuExistaDate()) return;
 
-        System.out.print("ID produs: ");
-        int id = Integer.parseInt(scanner.nextLine().trim());
+        int id = citesteInt(scanner, "ID produs: ");
 
         Produs p = meniu.get(id);
         if (p == null) {
@@ -231,32 +257,144 @@ public class Rapoarte {
     }
 
     // 9. Top produse vandute (in functie de venitul generat)
-    public void bestsellers() {
+    public void bestsellers(Scanner scanner) {
+        if (nuExistaDate()) return;
 
+        int top = citesteInt(scanner, "Top cate produse doriti sa vedeti? Introduceti nr: ");
+
+        List<Map.Entry<Integer, Double>> sortate = new ArrayList<>(venituriProduse().entrySet());
+        sortate.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+        header();
+        System.out.println("TOP " + top + " PRODUSE DUPA VENITUL GENERAT\n");
+        for (int i = 0; i < Math.min(top, sortate.size()); i++) {
+            Produs p = meniu.get(sortate.get(i).getKey());
+            System.out.printf("%d | %-32s | %10.2f RON\n", i + 1, p.getDenumire(), sortate.get(i).getValue());
+        }
+        footer();
     }
 
     // 10. Top produse vandute pe categorii
-    public void vanzariPeCategorii() {
+    public void vanzariPeCategorii(Scanner scanner) {
+        if (nuExistaDate()) return;
 
+        int top = citesteInt(scanner, "Top cate produse doriti sa vedeti? Introduceti nr: ");
+
+        List<Map.Entry<Integer, Integer>> sortate = new ArrayList<>(cantitatiVandute().entrySet());
+        sortate.sort((a, b) -> b.getValue() - a.getValue());
+
+        header();
+        System.out.println("TOP " + top + " PRODUSE PE CATEGORII\n");
+        for (Categorie categ : Categorie.values()) {
+            System.out.println("\n--------------------------------- " + categ + " ---------------------------------");
+            int afisate = 0;
+            for (Map.Entry<Integer, Integer> linie : sortate) {
+                Produs p = meniu.get(linie.getKey());
+                if (p.getCategorie() == categ && afisate < top) {
+                    afisate++;
+                    System.out.printf("%d | %-32s | %4d portii | %6.2f RON\n",
+                            afisate, p.getDenumire(), linie.getValue(), linie.getValue() * p.getPret());
+                }
+            }
+            System.out.println();
+        }
+        footer();
     }
 
-    // 11. Cea mai mica si cea mai mare comanda
-    public void comandaMinMaxTotal() {
+    // 11. Venit pe intervale orare
+    public void venitPeOra() {
+        if (nuExistaDate()) return;
 
+        double[] venituri = new double[24];
+        for (Comanda c : comenzi) {
+            venituri[c.getDataSiOra().getHour()] += c.getTotal();
+        }
+
+        header();
+        System.out.println("VENIT PE INTERVALE ORARE\n");
+        for (int ora = 0; ora < 24; ora++) {
+            if (venituri[ora] > 0) {
+                System.out.printf("%02d:00 - %02d:59 | %6.2f RON\n", ora, ora, venituri[ora]);
+            }
+        }
+        footer();
     }
 
     // 12. Lista produselor nevandute
     public void produseNevandute() {
+        if (nuExistaDate()) return;
 
+        Map<Integer, Integer> cantitatiVandute = cantitatiVandute();
+
+        header();
+        System.out.println("PRODUSE NEVANDUTE\n");
+        for (Produs p : meniu.values()) {
+            // un produs nevandut nu apare in nicio comanda
+            if (!cantitatiVandute.containsKey(p.getId())) {
+                System.out.println(p);
+            }
+        }
+        footer();
     }
 
     // 13. Distributia caloriilor pe intervale orare
     public void caloriiPeOra() {
+        if (nuExistaDate()) return;
 
+        int[] calorii = new int[24];
+        for (Comanda c : comenzi) {
+            int ora = c.getDataSiOra().getHour();
+            for (Map.Entry<Integer, Integer> linie : c.getProduse().entrySet()) {
+                Produs p = meniu.get(linie.getKey());
+                //cantitate * calorii
+                calorii[ora] += linie.getValue() * p.getCalorii();
+            }
+        }
+
+        header();
+        System.out.println("DISTRIBUTIA CALORIILOR PE INTERVALE ORARE\n");
+        for (int ora = 0; ora < 24; ora++) {
+            if (calorii[ora] > 0) {
+                System.out.printf("%02d:00 - %02d:59 | %8d kcal\n", ora, ora, calorii[ora]);
+            }
+        }
+        footer();
     }
 
-    // 14. Raport portii vegetariene
-    public void raportVegetarian() {
+    // 14. Vanzari pe zilele saptamanii si pe ora
+    public void vanzariZiOra() {
+        if (nuExistaDate()) return;
 
+        double[][] vanzari = new double[7][24];
+        for (Comanda c : comenzi) {
+            int zi = c.getDataSiOra().getDayOfWeek().getValue() - 1;
+            int ora = c.getDataSiOra().getHour();
+            vanzari[zi][ora] += c.getTotal();
+        }
+
+        header();
+        System.out.println("VANZARI PE ZILE SI ORE\n");
+
+        System.out.printf("%-13s", "");
+        for (int zi = 0; zi < 7; zi++) {
+            System.out.printf("%10s", ZILELE_SAPT[zi]);
+        }
+        System.out.println();
+
+        for (int ora = 0; ora < 24; ora++) {
+            double totalOra = 0;
+            for (int zi = 0; zi < 7; zi++) {
+                totalOra += vanzari[zi][ora];
+            }
+            if (totalOra == 0) continue;
+
+            System.out.printf("%02d:00-%02d:59  ", ora, ora);
+            for (int zi = 0; zi < 7; zi++) {
+                System.out.printf("%10.2f", vanzari[zi][ora]);
+            }
+            System.out.println();
+        }
+        footer();
     }
+
 }

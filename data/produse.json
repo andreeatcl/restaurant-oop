@@ -158,21 +158,5 @@
     "calorii": 110,
     "pret": 14,
     "id": 20
-  },
-  {
-    "categorie": "BAUTURI",
-    "esteVegetarian": true,
-    "denumire": "Test",
-    "calorii": 230,
-    "pret": 20.1,
-    "id": 21
-  },
-  {
-    "categorie": "APERITIVE",
-    "esteVegetarian": false,
-    "denumire": "test2",
-    "calorii": 100,
-    "pret": 15,
-    "id": 22
   }
 ]

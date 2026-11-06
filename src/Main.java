@@ -50,7 +50,7 @@ public class Main {
         }
 
         salveaza(restaurant);
-        System.out.println("La revedere!!");
+        System.out.println("\nVa multumim ca ati folosit aplicatia noastra!");
         scanner.close();
     }
 
@@ -79,41 +79,46 @@ public class Main {
     private static void meniuRapoarte(Restaurant restaurant, Scanner scanner) throws ProdusInexistentException {
         Rapoarte rapoarte = restaurant.getRapoarte();
         boolean back = false;
+        boolean showMenu = true;
         while (!back) {
-            System.out.println("\n------------------------------------ RAPOARTE ------------------------------------");
-            System.out.println("1. Valoarea totala a comenzilor dintr-o anumita zi");
-            System.out.println("2. Numarul total de comenzi dintr-o anumita perioada");
-            System.out.println("3. Top produse vandute (in functie de cantitate)");
-            System.out.println("4. Venitul total generat de un anumit produs");
-            System.out.println("5. Lista comenzilor realizate intr-o anumita zi");
-            System.out.println("6. Valoarea medie a unei comenzi");
-            System.out.println("7. Statistici vanzari pe zilele saptamanii");
-            System.out.println("8. Distributia comenzilor in functie de ora");
-            System.out.println("9. Top produse vandute (in functie de venitul generat)");
-            System.out.println("10. Top produse vandute pe categorii");
-            System.out.println("11. Cea mai mica si cea mai mare comanda");
-            System.out.println("12. Lista produselor nevandute");
-            System.out.println("13. Distributia caloriilor pe intervale orare");
-            System.out.println("14. Raport portii vegetariene");
-            System.out.println("0. Inapoi la meniul principal");
-            System.out.print("Introdu optiunea: ");
+            if (showMenu) {
+                System.out.println("\n------------------------------------ RAPOARTE ------------------------------------");
+                System.out.println("1. Valoarea totala a comenzilor dintr-o anumita zi");
+                System.out.println("2. Numarul total de comenzi dintr-o anumita perioada");
+                System.out.println("3. Top produse vandute (in functie de cantitate)");
+                System.out.println("4. Venitul total generat de un anumit produs");
+                System.out.println("5. Lista comenzilor realizate intr-o anumita zi");
+                System.out.println("6. Valoarea medie a unei comenzi");
+                System.out.println("7. Statistici vanzari pe zilele saptamanii");
+                System.out.println("8. Distributia comenzilor in functie de ora");
+                System.out.println("9. Top produse vandute (in functie de venitul generat)");
+                System.out.println("10. Top produse vandute pe categorii");
+                System.out.println("11. Venit pe intervale orare");
+                System.out.println("12. Lista produselor nevandute");
+                System.out.println("13. Distributia caloriilor pe intervale orare");
+                System.out.println("14. Vanzari pe zilele saptamanii si pe ora");
+                System.out.println("0. Inapoi la meniul principal");
+            }
+            showMenu = false;
+            System.out.print("Introdu optiunea (m = meniu, 0 = inapoi): ");
             String optiune = scanner.nextLine().trim();
 
             switch (optiune) {
-                case "1" -> rapoarte.totalZi(scanner); // ok
-                case "2" -> rapoarte.nrComenziPerioada(scanner); // ok
-                case "3" -> rapoarte.topProduse(scanner); // ok
-                case "4" -> rapoarte.vanzariProdus(scanner); // ok
-                case "5" -> rapoarte.comenziZi(scanner); // ok
-                case "6" -> rapoarte.valoareMedie(); // ok
-                case "7" -> rapoarte.vanzariPeZile(); // ok
-                case "8" -> rapoarte.oraDeVarf(); // ok
-                case "9" -> { }   // rapoarte.bestsellers()
-                case "10" -> { }  // rapoarte.vanzariPeCategorii()
-                case "11" -> { }  // rapoarte.comandaMinMaxTotal()
-                case "12" -> { }  // rapoarte.produseNevandute()
-                case "13" -> { }  // rapoarte.caloriiPeOra()
-                case "14" -> { }  // rapoarte.raportVegetarian()
+                case "m" -> showMenu = true;
+                case "1" -> rapoarte.totalZi(scanner);
+                case "2" -> rapoarte.nrComenziPerioada(scanner);
+                case "3" -> rapoarte.topProduse(scanner);
+                case "4" -> rapoarte.vanzariProdus(scanner);
+                case "5" -> rapoarte.comenziZi(scanner);
+                case "6" -> rapoarte.valoareMedie();
+                case "7" -> rapoarte.vanzariPeZile();
+                case "8" -> rapoarte.oraDeVarf();
+                case "9" -> rapoarte.bestsellers(scanner);
+                case "10" -> rapoarte.vanzariPeCategorii(scanner);
+                case "11" -> rapoarte.venitPeOra();
+                case "12" -> rapoarte.produseNevandute();
+                case "13" -> rapoarte.caloriiPeOra();
+                case "14" -> rapoarte.vanzariZiOra();
                 case "0" -> back = true;
                 default -> System.out.println("Optiune invalida. Incearca din nou!");
             }
